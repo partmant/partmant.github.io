@@ -197,6 +197,17 @@
   .stat-card .val{font-size:32px;font-weight:800;color:var(--indigo);letter-spacing:-1px;}
   .stat-card .lb{font-size:13.5px;color:var(--gray);margin-top:6px;font-weight:600;}
   .stat-note{font-size:13px;color:var(--muted);margin-top:14px;}
+  .demo-account{
+    background:var(--indigo-light);border:1px solid var(--indigo);border-radius:14px;
+    padding:16px 20px;margin-bottom:16px;font-size:15px;color:var(--ink);
+  }
+  .demo-account .da-title{font-weight:800;color:var(--indigo);margin-bottom:8px;font-size:14px;letter-spacing:.2px;}
+  .demo-account .da-row{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:baseline;padding:2px 0;}
+  .demo-account .da-role{font-weight:700;color:var(--gray);min-width:64px;}
+  .demo-account code{
+    background:#fff;border:1px solid var(--border);border-radius:6px;padding:3px 8px;
+    font-family:"SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;font-size:14px;color:var(--ink);
+  }
   @media (max-width:860px){.stat-grid{grid-template-columns:repeat(2,1fr);}}
 
   .highlight-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px;}
@@ -632,6 +643,11 @@
         <div class="pill">커밋 81/700</div>
       </div>
       <div class="stat-note" style="margin-bottom:8px;">※ 배포 서비스는 비용·운영 상황에 따라 일시 중단될 수 있습니다</div>
+      <div class="demo-account">
+        <div class="da-title">🔑 테스트 계정 (로그인 없이 기능 체험 가능 · 매일 자정 데이터 초기화)</div>
+        <div class="da-row"><span class="da-role">영업사원</span><code>demo.staff@quoteguard.com</code><code>salesDemo26!</code></div>
+        <div class="da-row"><span class="da-role">승인권자</span><code>demo.manager@quoteguard.com</code><code>managerDemo26!</code></div>
+      </div>
       <div class="proj-body">
         <div>
           <p class="proj-desc">영업 견적의 작성부터 승인, PDF 발송까지 처리하는 B2B 시스템에서, 계정 생성부터 로그인 · 권한 검증 · 배포까지 계정/인증 도메인 전체를 담당했습니다.</p>
