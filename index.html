@@ -972,7 +972,7 @@
           <div class="diagram-cap">구독 상태 전이도 — 취소 경로(회색)와 자동 갱신 경로(초록)</div>
         </div>
         <div class="code-block">
-          <div class="code-head"><span class="fname">backend/.../domain/subscription/service/SubscriptionService.java</span><span class="dots"><span></span><span></span><span></span></span></div>
+          <div class="code-head"><span class="fname">.../domain/subscription/service/SubscriptionService.java</span><span class="dots"><span></span><span></span><span></span></span></div>
           <pre><code><span class="cmt">// 취소: ACTIVE → CANCEL_RESERVED (endedAt은 그대로, 만료 전까지 혜택 유지)</span>
 @Transactional
 <span class="hl">public</span> SubscriptionStatusResponse cancel() {
@@ -1133,7 +1133,7 @@
           <div class="diagram-cap">순차 호출(위) vs 청크 단위 병렬 호출(아래) 타임라인 비교</div>
         </div>
         <div class="code-block">
-          <div class="code-head"><span class="fname">backend/services/region/legalRegionSyncService.js</span><span class="dots"><span></span><span></span><span></span></span></div>
+          <div class="code-head"><span class="fname">services/region/legalRegionSyncService.js</span><span class="dots"><span></span><span></span><span></span></span></div>
           <pre><code><span class="hl">const</span> chunkSize = 3;
 
 <span class="hl">for</span> (<span class="hl">let</span> i = 0; i &lt; pageNumbers.length; i += chunkSize) {
