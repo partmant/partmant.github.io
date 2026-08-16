@@ -684,7 +684,7 @@
           </div>
           <div class="solve-box">
             <div class="k">문제</div><div class="v">견적 상태가 바뀔 때마다 사용자 통계(견적 수·승인/반려/발송 건수·총액·평균 할인율)를 갱신해야 하는데, 변경분만 더하고 빼는 방식으로 구현하다 보니 상태가 여러 번 바뀌는 경우 계산 순서에 따라 누적값이 실제와 어긋날 수 있는 위험을 발견했습니다. 전체 견적을 애플리케이션으로 가져와 매번 반복 계산하는 방식도 고려했지만, 데이터가 늘어날수록 연산 부담이 커지는 문제가 있었습니다.</div>
-            <div class="k">해결</div><div class="v">매번 전체를 다시 계산하되, 그 계산을 애플리케이션에서 순회하지 않고 QueryDSL의 CASE-WHEN + SUM 집계 쿼리로 견적 테이블 전체를 DB에 위임해, 상태 변경 순서와 무관하게 항상 같은 결과가 나오는 멱등 구조로 전환했습니다. 동시 수정이 가능한 <code>UserStats</code> 엔티티에는 <code>@Version</code> 기반 낙관적 락을 별도로 적용해, 평소에는 락 없이 조회·수정하다가 커밋 시점에 버전이 어긋나면 충돌로 판단해 재시도하도록 했습니다.</div>
+            <div class="k">해결</div><div class="v">매번 전체를 다시 계산하되, 그 계산을 애플리케이션에서 순회하지 않고 QueryDSL의 CASE-WHEN + SUM 집계 쿼리로 견적 테이블 전체를 DB에 위임해, 상태 변경 이력의 순서에 의존하지 않고 현재 DB 상태를 기준으로 항상 다시 집계하도록 전환했습니다. 동시 수정이 가능한 <code>UserStats</code> 엔티티에는 <code>@Version</code> 기반 낙관적 락을 별도로 적용해, 평소에는 락 없이 조회·수정하다가 커밋 시점에 버전이 어긋나면 충돌로 판단해 재시도하도록 했습니다.</div>
           </div>
           <div class="solve-box">
             <div class="k">문제</div><div class="v">로컬에서는 정상 동작하는 실시간 알림(SSE) 연결이 배포 환경에서만 주기적으로 끊기는 현상을 발견했습니다. 코드 자체에는 문제가 없어 원인 파악이 쉽지 않았고, 연결이 끊기는 시점이 일정하지 않아 재현하기도 까다로웠습니다.</div>
@@ -695,7 +695,7 @@
             <div><div class="k">인증</div><div class="v">401(인증 실패)과 403(인가 실패)의 처리 책임을 분리하고, 권한 검증을 서버(SecurityConfig) 기준으로 일원화했습니다.</div></div>
           </div>
           <div class="result-bar" style="margin-top:14px;">
-            <div><div class="k">데이터</div><div class="v">사용자 통계를 애플리케이션 순회 대신 DB 집계 쿼리로 전체 재계산하는 멱등 구조로 설계해, 상태 변경 순서와 무관하게 항상 같은 결과를 보장합니다. 담당 도메인에는 140개 테스트 케이스를 작성했습니다.</div></div>
+            <div><div class="k">데이터</div><div class="v">사용자 통계를 애플리케이션 순회 대신 DB 집계 쿼리로 현재 상태를 기준으로 항상 다시 계산하도록 설계해, 상태 변경 이력의 순서에 의존하지 않고 항상 같은 결과를 보장합니다. 담당 도메인에는 140개 테스트 케이스를 작성했습니다.</div></div>
           </div>
           <div class="result-bar" style="margin-top:14px;">
             <div><div class="k">배포</div><div class="v">GitHub Actions 기반으로 빌드 → GHCR 푸시 → SSH 배포 → 컨테이너 재기동까지 7단계를 git push 1회로 자동 실행하도록 구축했습니다. 이미지를 커밋 SHA로 태깅해 보관하므로, 문제 발생 시 이전 SHA 이미지로 재배포할 수 있는 기반을 마련했습니다.</div></div>
@@ -713,7 +713,7 @@
 
       <div class="deepdive">
         <div class="deepdive-head"><h4>핵심 문제 딥다이브 1</h4><span class="tag">인증 · 필터체인</span></div>
-        <p class="deepdive-desc">무효한 JWT가 필터 체인을 통과해 컨트롤러까지 도달하던 버그를, 검증 실패 시점에 체인 진행을 즉시 중단하도록 고쳐 인증 우회 가능성을 제거했습니다.</p>
+        <p class="deepdive-desc">무효한 JWT가 필터 체인을 통과해 컨트롤러까지 도달하던 버그를, 검증 실패 시점에 체인 진행을 즉시 중단하도록 고쳐 컨트롤러 도달을 차단했습니다.</p>
         <div class="diagram-box">
           <svg viewBox="0 0 860 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="JWT 인증 필터 시퀀스 다이어그램" font-family="Pretendard Variable, Pretendard, -apple-system, BlinkMacSystemFont, sans-serif">
   <defs>
